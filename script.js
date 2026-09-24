@@ -8,24 +8,26 @@ const CONFIG = {
 
   date: "A little letter from my heart",
 
-  greeting: "Dear Someone Special,",
+  greeting: "Hi Chibiii,",
 
   paragraphs: [
 
-    `I don't really know where to begin, because somehow there are never enough words to describe what you mean to me.`,
+    `Hallooooow Sayang, BWAHAHAHAHAHAHHAHAHA.`,
 
-    `You have a <span class="glowing-word">beautiful</span> way of making ordinary moments feel special. Your smile, your presence, and even the little things you probably don't notice can mean more than you know.`,
+    `Aku buatin nih buat kamu yang <span class="glowing-word">cantik lucu imut baik pinter dan chibii</span>, yang hari ini sedang berulangtahun ke 18.`,
 
-    `Today, I just want you to know that you are deeply appreciated, genuinely cherished, and incredibly <span class="glowing-word">special</span> to me.`,
+    `Aku gabisa ngomong banyak karena yah ga jago ngomong, aku cuma mau bilang kalo aku itu makasi banget udah ditemenin sama kamu meski kamum nih sering <span class="glowing-word">ngeselin</span> ke aku.`,
 
-    `I hope this new chapter of your life brings you beautiful memories, peaceful moments, and all the <span class="glowing-word">happiness</span> your heart deserves.`
+    `Semoga kamu selalu diberikan berkah umur, dilancarkan rezekinya, dan segala keinginan kamu <span class="glowing-word">tercapai</span> ya sayangku.`
+
+    `Sekarang kamu udah ga kecil lagi sayang sekarang udah gede, jadi jangan banyak nangis lagi yaa sekarang harus kuat dan buat bangga keluarga kamu terutama buat <span class="glowing-word">almarhum ibu kamu.</span>`
 
   ],
 
-  ending: "Happy Birthday. ♡",
+  ending: "Happy Birthday Sayang LOVE UUUUUUUUUUUUUU. ♡",
 
   birthdayMessage:
-    "May your days be filled with beautiful moments, genuine happiness, and people who love you just as much as you deserve."
+    "Semoga kedepannya hidup kamu dipenuhi momen moen indah, kebahagiaan berlimpah, dan orang orang yang menyayangi kamu."
 
 };
 
