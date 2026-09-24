@@ -16,7 +16,7 @@ const CONFIG = {
 
     `Aku buatin nih buat kamu yang <span class="glowing-word">cantik lucu imut baik pinter dan chibii</span>, yang hari ini sedang berulangtahun ke 18.`,
 
-    `Aku gabisa ngomong banyak karena yah ga jago ngomong, aku cuma mau bilang kalo aku itu makasi banget udah ditemenin sama kamu meski kamum nih sering <span class="glowing-word">ngeselin</span> ke aku.`,
+    `Aku gabisa ngomong banyak karena yah ga jago ngomong, aku cuma mau bilang kalo aku itu makasi banget udah ditemenin sama kamu meski kamu nih sering <span class="glowing-word">ngeselin</span> ke aku.`,
 
     `Semoga kamu selalu diberikan berkah umur, dilancarkan rezekinya, dan segala keinginan kamu <span class="glowing-word">tercapai</span> ya sayangku.`,
 
@@ -24,10 +24,11 @@ const CONFIG = {
 
   ],
 
-  ending: "Happy Birthday Sayang LOVE UUUUUUUUUUUUUU. ♡",
+  ending:
+    "Happy Birthday Sayang LOVE UUUUUUUUUUUUUU. ♡",
 
   birthdayMessage:
-    "Semoga kedepannya hidup kamu dipenuhi momen moen indah, kebahagiaan berlimpah, dan orang orang yang menyayangi kamu."
+    "Semoga kedepannya hidup kamu dipenuhi momen momen indah, kebahagiaan berlimpah, dan orang orang yang menyayangi kamu."
 
 };
 
@@ -134,29 +135,17 @@ function initialize() {
 
 function setupInteractions() {
 
-  /*
-    Tombol Open
-  */
-
   openButton.addEventListener(
     "click",
     handleOpenLetter
   );
 
 
-  /*
-    Klik amplop
-  */
-
   envelope.addEventListener(
     "click",
     handleOpenLetter
   );
 
-
-  /*
-    Keyboard accessibility
-  */
 
   envelope.addEventListener(
     "keydown",
@@ -176,10 +165,6 @@ function setupInteractions() {
     }
   );
 
-
-  /*
-    Replay
-  */
 
   replayButton.addEventListener(
     "click",
@@ -202,22 +187,12 @@ function handleOpenLetter() {
 
 
   /*
-    PENTING UNTUK CHROME MOBILE
-
-    Musik HARUS dipanggil langsung
-    dari event click/tap user.
-
-    Jangan menunggu animasi.
-    Jangan menunggu await.
+    Musik harus dimulai langsung
+    dari gesture user.
   */
 
   startMusicFromUserGesture();
 
-
-  /*
-    Setelah play dipanggil,
-    jalankan animasi surat.
-  */
 
   openLetter();
 
@@ -231,28 +206,14 @@ function handleOpenLetter() {
 
 function startMusicFromUserGesture() {
 
-  /*
-    Mulai dari awal.
-  */
-
   birthdayMusic.currentTime = 0;
 
   birthdayMusic.volume = 0.45;
 
 
-  /*
-    play() dipanggil langsung
-    ketika user melakukan tap.
-  */
-
   const playPromise =
     birthdayMusic.play();
 
-
-  /*
-    play() modern browser
-    mengembalikan Promise.
-  */
 
   if (
     playPromise !== undefined
@@ -261,21 +222,14 @@ function startMusicFromUserGesture() {
     playPromise
       .then(() => {
 
-        /*
-          Musik berhasil berjalan.
-        */
-
         musicPlaying = true;
-
 
         musicButton.textContent =
           "❚❚";
 
-
         musicButton.classList.add(
           "playing"
         );
-
 
         musicTitle.textContent =
           "Now playing ♡";
@@ -285,27 +239,19 @@ function startMusicFromUserGesture() {
 
       .catch(error => {
 
-        /*
-          Musik diblokir browser.
-        */
-
         console.error(
           "Music gagal diputar:",
           error
         );
 
-
         musicPlaying = false;
-
 
         musicButton.textContent =
           "▶";
 
-
         musicButton.classList.remove(
           "playing"
         );
-
 
         musicTitle.textContent =
           "Tap ▶ untuk memutar musik ♡";
@@ -336,14 +282,12 @@ async function openLetter() {
 
 
   /* =====================================
-     HIDE BUTTON
+     HIDE OPEN BUTTON
   ====================================== */
 
-  openButton.style.opacity =
-    "0";
+  openButton.style.opacity = "0";
 
-  openButton.style.pointerEvents =
-    "none";
+  openButton.style.pointerEvents = "none";
 
 
 
@@ -353,7 +297,6 @@ async function openLetter() {
 
   envelope.animate(
     [
-
       {
         transform: "scale(1)"
       },
@@ -371,14 +314,11 @@ async function openLetter() {
       }
 
     ],
-
     {
-
       duration: 350,
 
       easing:
         "cubic-bezier(.34,1.56,.64,1)"
-
     }
   );
 
@@ -417,36 +357,36 @@ async function openLetter() {
     );
 
 
-  preview.animate(
-    [
+  if (preview) {
 
+    preview.animate(
+      [
+        {
+          transform:
+            "translateY(0)",
+
+          opacity: 1
+        },
+
+        {
+          transform:
+            "translateY(-150px) scale(1.05)",
+
+          opacity: 1
+        }
+
+      ],
       {
-        transform:
-          "translateY(0)",
+        duration: 900,
 
-        opacity: 1
-      },
+        easing:
+          "cubic-bezier(.16,1,.3,1)",
 
-      {
-        transform:
-          "translateY(-150px) scale(1.05)",
-
-        opacity: 1
+        fill: "forwards"
       }
+    );
 
-    ],
-
-    {
-
-      duration: 900,
-
-      easing:
-        "cubic-bezier(.16,1,.3,1)",
-
-      fill: "forwards"
-
-    }
-  );
+  }
 
 
 
@@ -458,13 +398,12 @@ async function openLetter() {
      SWITCH TO LETTER
   ====================================== */
 
-  letterScene.classList.add(
-    "hidden"
+  letterScene.classList.remove(
+    "active"
   );
 
-
   letterView.classList.add(
-    "visible"
+    "active"
   );
 
 
@@ -481,7 +420,7 @@ async function openLetter() {
 
 
 
-  await wait(250);
+  await wait(450);
 
 
 
@@ -493,7 +432,7 @@ async function openLetter() {
 
 
 
-  await wait(500);
+  await wait(700);
 
 
 
@@ -505,7 +444,7 @@ async function openLetter() {
 
 
 
-  await wait(1300);
+  await wait(1800);
 
 
 
@@ -537,14 +476,13 @@ async function openLetter() {
 
 async function typeGreeting() {
 
-  letterGreeting.textContent =
-    "";
+  letterGreeting.textContent = "";
 
 
   await typeRichText(
     letterGreeting,
     CONFIG.greeting,
-    50
+    75
   );
 
 }
@@ -557,8 +495,7 @@ async function typeGreeting() {
 
 async function typeBody() {
 
-  letterBody.innerHTML =
-    "";
+  letterBody.innerHTML = "";
 
 
   for (
@@ -575,19 +512,26 @@ async function typeBody() {
       document.createElement("p");
 
 
-    letterBody.appendChild(
-      p
-    );
+    letterBody.appendChild(p);
 
+
+    /*
+      45ms per karakter.
+      Lebih pelan dari versi sebelumnya.
+    */
 
     await typeRichText(
       p,
       paragraph,
-      17
+      45
     );
 
 
-    await wait(250);
+    /*
+      Jeda antar paragraf.
+    */
+
+    await wait(700);
 
   }
 
@@ -601,14 +545,13 @@ async function typeBody() {
 
 async function typeEnding() {
 
-  letterEnding.textContent =
-    "";
+  letterEnding.textContent = "";
 
 
   await typeRichText(
     letterEnding,
     CONFIG.ending,
-    55
+    70
   );
 
 }
@@ -622,22 +565,11 @@ async function typeEnding() {
 async function typeRichText(
   element,
   html,
-  delay = 30
+  delay = 45
 ) {
 
-  /*
-    Temporary DOM digunakan supaya
-    tag seperti:
-
-    <span class="glowing-word">
-
-    tetap berfungsi.
-  */
-
   const temp =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
 
   temp.innerHTML =
@@ -655,9 +587,9 @@ async function typeRichText(
     }
 
 
-    /*
-      TEXT NODE
-    */
+    /* =====================================
+       TEXT NODE
+    ====================================== */
 
     if (
       node.nodeType ===
@@ -697,9 +629,9 @@ async function typeRichText(
 
 
 
-    /*
-      ELEMENT NODE
-    */
+    /* =====================================
+       HTML ELEMENT
+    ====================================== */
 
     if (
       node.nodeType ===
@@ -759,7 +691,8 @@ function getTypingDelay(
 ) {
 
   /*
-    Pause setelah titik.
+    Titik / tanda seru / tanda tanya
+    berhenti cukup lama.
   */
 
   if (
@@ -768,17 +701,31 @@ function getTypingDelay(
     character === "?"
   ) {
 
-    return base * 7;
+    return base * 8;
 
   }
 
 
   /*
-    Pause setelah koma.
+    Koma berhenti sebentar.
   */
 
   if (
     character === ","
+  ) {
+
+    return base * 4;
+
+  }
+
+
+  /*
+    Titik dua / titik koma.
+  */
+
+  if (
+    character === ":" ||
+    character === ";"
   ) {
 
     return base * 3;
@@ -794,10 +741,14 @@ function getTypingDelay(
     character === " "
   ) {
 
-    return base * 0.45;
+    return base * 0.5;
 
   }
 
+
+  /*
+    Karakter biasa.
+  */
 
   return base;
 
@@ -862,15 +813,18 @@ function createFloatingHeart() {
     );
 
 
+  /*
+    Cocok dengan CSS baru.
+  */
+
   heart.className =
-    "floating-heart";
+    "heart-particle";
 
 
   heart.textContent =
     Math.random() > 0.5
       ? "♡"
       : "♥";
-
 
 
   const left =
@@ -1037,71 +991,24 @@ function setupMusic() {
     0.45;
 
 
-
-  /*
-    Tombol play/pause
-  */
-
   musicButton.addEventListener(
     "click",
     toggleMusic
   );
 
 
-
-  /*
-    Jika audio selesai.
-    Biasanya tidak terpanggil karena
-    audio menggunakan loop, tetapi
-    tetap kita siapkan.
-  */
-
-  birthdayMusic.addEventListener(
-    "ended",
-    () => {
-
-      musicPlaying =
-        false;
-
-
-      musicButton.textContent =
-        "▶";
-
-
-      musicButton.classList.remove(
-        "playing"
-      );
-
-
-      musicTitle.textContent =
-        "Our Special Song";
-
-    }
-  );
-
-
-
-  /*
-    Jika browser berhasil memutar audio
-    secara langsung.
-  */
-
   birthdayMusic.addEventListener(
     "play",
     () => {
 
-      musicPlaying =
-        true;
-
+      musicPlaying = true;
 
       musicButton.textContent =
         "❚❚";
 
-
       musicButton.classList.add(
         "playing"
       );
-
 
       musicTitle.textContent =
         "Now playing ♡";
@@ -1110,19 +1017,9 @@ function setupMusic() {
   );
 
 
-
-  /*
-    Jika audio dipause.
-  */
-
   birthdayMusic.addEventListener(
     "pause",
     () => {
-
-      /*
-        Jangan ubah UI saat audio
-        belum pernah dimainkan.
-      */
 
       if (
         birthdayMusic.currentTime === 0
@@ -1133,17 +1030,34 @@ function setupMusic() {
       }
 
 
-      musicPlaying =
-        false;
-
+      musicPlaying = false;
 
       musicButton.textContent =
         "▶";
 
+      musicButton.classList.remove(
+        "playing"
+      );
+
+    }
+  );
+
+
+  birthdayMusic.addEventListener(
+    "ended",
+    () => {
+
+      musicPlaying = false;
+
+      musicButton.textContent =
+        "▶";
 
       musicButton.classList.remove(
         "playing"
       );
+
+      musicTitle.textContent =
+        "Our Special Song";
 
     }
   );
@@ -1158,47 +1072,27 @@ function setupMusic() {
 
 async function toggleMusic() {
 
-  /*
-    PLAY
-  */
-
   if (
     birthdayMusic.paused
   ) {
 
     try {
 
-      const playPromise =
-        birthdayMusic.play();
+      await birthdayMusic.play();
 
-
-      if (
-        playPromise !== undefined
-      ) {
-
-        await playPromise;
-
-      }
-
-
-      musicPlaying =
-        true;
-
+      musicPlaying = true;
 
       musicButton.textContent =
         "❚❚";
-
 
       musicButton.classList.add(
         "playing"
       );
 
-
       musicTitle.textContent =
         "Now playing ♡";
 
     }
-
 
     catch (error) {
 
@@ -1206,7 +1100,6 @@ async function toggleMusic() {
         "Music could not start:",
         error
       );
-
 
       musicTitle.textContent =
         "Tap play to start ♡";
@@ -1216,27 +1109,18 @@ async function toggleMusic() {
   }
 
 
-  /*
-    PAUSE
-  */
-
   else {
 
     birthdayMusic.pause();
 
-
-    musicPlaying =
-      false;
-
+    musicPlaying = false;
 
     musicButton.textContent =
       "▶";
 
-
     musicButton.classList.remove(
       "playing"
     );
-
 
     musicTitle.textContent =
       "Paused";
@@ -1254,11 +1138,11 @@ async function toggleMusic() {
 async function transitionToBirthday() {
 
   /*
-    Sembunyikan surat.
+    Hilangkan surat.
   */
 
   letterView.classList.remove(
-    "visible"
+    "active"
   );
 
 
@@ -1266,30 +1150,18 @@ async function transitionToBirthday() {
 
 
   /*
-    Tampilkan birthday page.
+    Tampilkan birthday.
   */
 
   birthdayScene.classList.add(
-    "visible"
+    "active"
   );
 
 
   await wait(800);
 
 
-  /*
-    Heart burst.
-  */
-
   createHeartBurst();
-
-
-  /*
-    TIDAK ADA play() DI SINI.
-
-    Musik sudah dimulai ketika user
-    pertama kali menekan Open the letter.
-  */
 
 }
 
@@ -1325,7 +1197,6 @@ function setupLightbox() {
     );
 
 
-
   const polaroids =
     document.querySelectorAll(
       ".polaroid"
@@ -1358,7 +1229,7 @@ function setupLightbox() {
 
 
           photoLightbox.classList.add(
-            "visible"
+            "active"
           );
 
         }
@@ -1369,14 +1240,10 @@ function setupLightbox() {
 
 
 
-  /*
-    Close lightbox
-  */
-
   function closePhoto() {
 
     photoLightbox.classList.remove(
-      "visible"
+      "active"
     );
 
   }
@@ -1388,11 +1255,6 @@ function setupLightbox() {
     closePhoto
   );
 
-
-
-  /*
-    Klik background untuk close.
-  */
 
   photoLightbox.addEventListener(
     "click",
@@ -1410,11 +1272,6 @@ function setupLightbox() {
     }
   );
 
-
-
-  /*
-    ESC untuk desktop.
-  */
 
   document.addEventListener(
     "keydown",
@@ -1443,27 +1300,18 @@ function resetMusic() {
 
   birthdayMusic.pause();
 
+  birthdayMusic.currentTime = 0;
 
-  birthdayMusic.currentTime =
-    0;
+  birthdayMusic.volume = 0.45;
 
-
-  birthdayMusic.volume =
-    0.45;
-
-
-  musicPlaying =
-    false;
-
+  musicPlaying = false;
 
   musicButton.textContent =
     "▶";
 
-
   musicButton.classList.remove(
     "playing"
   );
-
 
   musicTitle.textContent =
     "Our Special Song";
@@ -1479,20 +1327,17 @@ function resetMusic() {
 function replayExperience() {
 
   /*
-    Batalkan typing yang sedang berlangsung.
+    Batalkan typing.
   */
 
-  typingCancelled =
-    true;
+  typingCancelled = true;
 
 
   /*
-    Izinkan surat dibuka kembali.
+    Reset state.
   */
 
-  hasOpened =
-    false;
-
+  hasOpened = false;
 
 
   /*
@@ -1502,27 +1347,24 @@ function replayExperience() {
   resetMusic();
 
 
-
   /*
-    Reset letter.
+    Reset isi surat.
   */
 
   letterGreeting.textContent =
     "";
 
-
   letterBody.innerHTML =
     "";
-
 
   letterEnding.textContent =
     "";
 
 
 
-  /*
-    Reset envelope.
-  */
+  /* =====================================
+     RESET ENVELOPE
+  ====================================== */
 
   const flap =
     document.querySelector(
@@ -1534,7 +1376,6 @@ function replayExperience() {
     document.querySelector(
       ".letter-preview"
     );
-
 
 
   flap.style.transform =
@@ -1550,29 +1391,29 @@ function replayExperience() {
 
 
 
-  /*
-    Reset visibility.
-  */
+  /* =====================================
+     RESET SCENES
+  ====================================== */
 
   birthdayScene.classList.remove(
-    "visible"
+    "active"
   );
 
 
   letterView.classList.remove(
-    "visible"
+    "active"
   );
 
 
-  letterScene.classList.remove(
-    "hidden"
+  letterScene.classList.add(
+    "active"
   );
 
 
 
-  /*
-    Reset Open button.
-  */
+  /* =====================================
+     RESET BUTTON
+  ====================================== */
 
   openButton.style.opacity =
     "1";
@@ -1583,9 +1424,9 @@ function replayExperience() {
 
 
 
-  /*
-    Reset scroll.
-  */
+  /* =====================================
+     RESET SCROLL
+  ====================================== */
 
   window.scrollTo(
     0,
