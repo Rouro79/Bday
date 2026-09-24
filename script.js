@@ -4,7 +4,7 @@
 
 const CONFIG = {
 
-  name: "Someone Special",
+  name: "Hi Chibii",
 
   date: "A little letter from my heart",
 
@@ -19,6 +19,7 @@ const CONFIG = {
     `Today, I just want you to know that you are deeply appreciated, genuinely cherished, and incredibly <span class="glowing-word">special</span> to me.`,
 
     `I hope this new chapter of your life brings you beautiful memories, peaceful moments, and all the <span class="glowing-word">happiness</span> your heart deserves.`
+
   ],
 
   ending: "Happy Birthday. ♡",
@@ -27,6 +28,7 @@ const CONFIG = {
     "May your days be filled with beautiful moments, genuine happiness, and people who love you just as much as you deserve."
 
 };
+
 
 
 /* =========================================
@@ -70,6 +72,7 @@ const replayButton =
   document.getElementById("replayButton");
 
 
+
 /* =========================================
    MUSIC
 ========================================= */
@@ -86,14 +89,17 @@ const musicTitle =
 let musicPlaying = false;
 
 
+
 /* =========================================
    STATE
 ========================================= */
 
 let hasOpened = false;
+
 let typingCancelled = false;
 
 let ambientHeartInterval = null;
+
 
 
 /* =========================================
@@ -119,22 +125,36 @@ function initialize() {
 }
 
 
+
 /* =========================================
    INTERACTIONS
 ========================================= */
 
 function setupInteractions() {
 
+  /*
+    Tombol Open
+  */
+
   openButton.addEventListener(
     "click",
-    openLetter
+    handleOpenLetter
   );
+
+
+  /*
+    Klik amplop
+  */
 
   envelope.addEventListener(
     "click",
-    openLetter
+    handleOpenLetter
   );
 
+
+  /*
+    Keyboard accessibility
+  */
 
   envelope.addEventListener(
     "keydown",
@@ -147,7 +167,7 @@ function setupInteractions() {
 
         event.preventDefault();
 
-        openLetter();
+        handleOpenLetter();
 
       }
 
@@ -155,12 +175,145 @@ function setupInteractions() {
   );
 
 
+  /*
+    Replay
+  */
+
   replayButton.addEventListener(
     "click",
     replayExperience
   );
 
 }
+
+
+
+/* =========================================
+   HANDLE OPEN LETTER
+========================================= */
+
+function handleOpenLetter() {
+
+  if (hasOpened) {
+    return;
+  }
+
+
+  /*
+    PENTING UNTUK CHROME MOBILE
+
+    Musik HARUS dipanggil langsung
+    dari event click/tap user.
+
+    Jangan menunggu animasi.
+    Jangan menunggu await.
+  */
+
+  startMusicFromUserGesture();
+
+
+  /*
+    Setelah play dipanggil,
+    jalankan animasi surat.
+  */
+
+  openLetter();
+
+}
+
+
+
+/* =========================================
+   START MUSIC FROM USER GESTURE
+========================================= */
+
+function startMusicFromUserGesture() {
+
+  /*
+    Mulai dari awal.
+  */
+
+  birthdayMusic.currentTime = 0;
+
+  birthdayMusic.volume = 0.45;
+
+
+  /*
+    play() dipanggil langsung
+    ketika user melakukan tap.
+  */
+
+  const playPromise =
+    birthdayMusic.play();
+
+
+  /*
+    play() modern browser
+    mengembalikan Promise.
+  */
+
+  if (
+    playPromise !== undefined
+  ) {
+
+    playPromise
+      .then(() => {
+
+        /*
+          Musik berhasil berjalan.
+        */
+
+        musicPlaying = true;
+
+
+        musicButton.textContent =
+          "❚❚";
+
+
+        musicButton.classList.add(
+          "playing"
+        );
+
+
+        musicTitle.textContent =
+          "Now playing ♡";
+
+      })
+
+
+      .catch(error => {
+
+        /*
+          Musik diblokir browser.
+        */
+
+        console.error(
+          "Music gagal diputar:",
+          error
+        );
+
+
+        musicPlaying = false;
+
+
+        musicButton.textContent =
+          "▶";
+
+
+        musicButton.classList.remove(
+          "playing"
+        );
+
+
+        musicTitle.textContent =
+          "Tap ▶ untuk memutar musik ♡";
+
+      });
+
+  }
+
+}
+
 
 
 /* =========================================
@@ -173,122 +326,207 @@ async function openLetter() {
     return;
   }
 
+
   hasOpened = true;
 
   typingCancelled = false;
 
 
-  /* hide button */
 
-  openButton.style.opacity = "0";
-  openButton.style.pointerEvents = "none";
+  /* =====================================
+     HIDE BUTTON
+  ====================================== */
+
+  openButton.style.opacity =
+    "0";
+
+  openButton.style.pointerEvents =
+    "none";
 
 
-  /* envelope press */
+
+  /* =====================================
+     ENVELOPE PRESS
+  ====================================== */
 
   envelope.animate(
     [
+
       {
         transform: "scale(1)"
       },
+
       {
         transform: "scale(0.96)"
       },
+
       {
         transform: "scale(1.02)"
       },
+
       {
         transform: "scale(1)"
       }
+
     ],
+
     {
+
       duration: 350,
-      easing: "cubic-bezier(.34,1.56,.64,1)"
+
+      easing:
+        "cubic-bezier(.34,1.56,.64,1)"
+
     }
   );
+
 
 
   await wait(250);
 
 
-  /* open flap */
+
+  /* =====================================
+     OPEN FLAP
+  ====================================== */
 
   const flap =
-    document.querySelector(".envelope-flap");
+    document.querySelector(
+      ".envelope-flap"
+    );
+
 
   flap.style.transform =
     "rotateX(-170deg)";
 
 
+
   await wait(550);
 
 
-  /* letter rises */
+
+  /* =====================================
+     LETTER RISES
+  ====================================== */
 
   const preview =
-    document.querySelector(".letter-preview");
+    document.querySelector(
+      ".letter-preview"
+    );
+
 
   preview.animate(
     [
+
       {
-        transform: "translateY(0)",
+        transform:
+          "translateY(0)",
+
         opacity: 1
       },
+
       {
-        transform: "translateY(-150px) scale(1.05)",
+        transform:
+          "translateY(-150px) scale(1.05)",
+
         opacity: 1
       }
+
     ],
+
     {
+
       duration: 900,
-      easing: "cubic-bezier(.16,1,.3,1)",
+
+      easing:
+        "cubic-bezier(.16,1,.3,1)",
+
       fill: "forwards"
+
     }
   );
+
 
 
   await wait(650);
 
 
-  /* switch scene */
 
-  letterScene.classList.add("hidden");
+  /* =====================================
+     SWITCH TO LETTER
+  ====================================== */
 
-  letterView.classList.add("visible");
+  letterScene.classList.add(
+    "hidden"
+  );
+
+
+  letterView.classList.add(
+    "visible"
+  );
+
 
 
   await wait(900);
 
 
-  /* type letter */
+
+  /* =====================================
+     TYPE GREETING
+  ====================================== */
 
   await typeGreeting();
 
+
+
   await wait(250);
+
+
+
+  /* =====================================
+     TYPE BODY
+  ====================================== */
 
   await typeBody();
 
+
+
   await wait(500);
 
+
+
+  /* =====================================
+     TYPE ENDING
+  ====================================== */
+
   await typeEnding();
+
 
 
   await wait(1300);
 
 
-  /* heart burst */
+
+  /* =====================================
+     HEART BURST
+  ====================================== */
 
   createHeartBurst();
+
 
 
   await wait(1800);
 
 
-  /* birthday */
+
+  /* =====================================
+     BIRTHDAY
+  ====================================== */
 
   await transitionToBirthday();
 
 }
+
 
 
 /* =========================================
@@ -297,7 +535,9 @@ async function openLetter() {
 
 async function typeGreeting() {
 
-  letterGreeting.textContent = "";
+  letterGreeting.textContent =
+    "";
+
 
   await typeRichText(
     letterGreeting,
@@ -308,16 +548,20 @@ async function typeGreeting() {
 }
 
 
+
 /* =========================================
    TYPE BODY
 ========================================= */
 
 async function typeBody() {
 
-  letterBody.innerHTML = "";
+  letterBody.innerHTML =
+    "";
+
 
   for (
-    const paragraph of CONFIG.paragraphs
+    const paragraph
+    of CONFIG.paragraphs
   ) {
 
     if (typingCancelled) {
@@ -328,7 +572,10 @@ async function typeBody() {
     const p =
       document.createElement("p");
 
-    letterBody.appendChild(p);
+
+    letterBody.appendChild(
+      p
+    );
 
 
     await typeRichText(
@@ -345,13 +592,16 @@ async function typeBody() {
 }
 
 
+
 /* =========================================
    TYPE ENDING
 ========================================= */
 
 async function typeEnding() {
 
-  letterEnding.textContent = "";
+  letterEnding.textContent =
+    "";
+
 
   await typeRichText(
     letterEnding,
@@ -360,6 +610,7 @@ async function typeEnding() {
   );
 
 }
+
 
 
 /* =========================================
@@ -373,15 +624,23 @@ async function typeRichText(
 ) {
 
   /*
-    Kita membuat temporary DOM supaya
-    tag <span class="glowing-word"> tetap
-    bisa digunakan.
+    Temporary DOM digunakan supaya
+    tag seperti:
+
+    <span class="glowing-word">
+
+    tetap berfungsi.
   */
 
   const temp =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
-  temp.innerHTML = html;
+
+  temp.innerHTML =
+    html;
+
 
 
   async function processNode(
@@ -394,7 +653,14 @@ async function typeRichText(
     }
 
 
-    if (node.nodeType === Node.TEXT_NODE) {
+    /*
+      TEXT NODE
+    */
+
+    if (
+      node.nodeType ===
+      Node.TEXT_NODE
+    ) {
 
       for (
         const character
@@ -405,9 +671,13 @@ async function typeRichText(
           return;
         }
 
+
         parent.appendChild(
-          document.createTextNode(character)
+          document.createTextNode(
+            character
+          )
         );
+
 
         await wait(
           getTypingDelay(
@@ -418,16 +688,29 @@ async function typeRichText(
 
       }
 
+
       return;
+
     }
 
 
-    if (node.nodeType === Node.ELEMENT_NODE) {
+
+    /*
+      ELEMENT NODE
+    */
+
+    if (
+      node.nodeType ===
+      Node.ELEMENT_NODE
+    ) {
 
       const clone =
         node.cloneNode(false);
 
-      parent.appendChild(clone);
+
+      parent.appendChild(
+        clone
+      );
 
 
       for (
@@ -447,6 +730,7 @@ async function typeRichText(
   }
 
 
+
   for (
     const child
     of temp.childNodes
@@ -462,6 +746,7 @@ async function typeRichText(
 }
 
 
+
 /* =========================================
    TYPING DELAY
 ========================================= */
@@ -470,6 +755,10 @@ function getTypingDelay(
   character,
   base
 ) {
+
+  /*
+    Pause setelah titik.
+  */
 
   if (
     character === "." ||
@@ -481,17 +770,37 @@ function getTypingDelay(
 
   }
 
-  if (character === ",") {
+
+  /*
+    Pause setelah koma.
+  */
+
+  if (
+    character === ","
+  ) {
+
     return base * 3;
+
   }
 
-  if (character === " ") {
+
+  /*
+    Spasi lebih cepat.
+  */
+
+  if (
+    character === " "
+  ) {
+
     return base * 0.45;
+
   }
+
 
   return base;
 
 }
+
 
 
 /* =========================================
@@ -502,10 +811,14 @@ function wait(ms) {
 
   return new Promise(
     resolve =>
-      setTimeout(resolve, ms)
+      setTimeout(
+        resolve,
+        ms
+      )
   );
 
 }
+
 
 
 /* =========================================
@@ -514,10 +827,14 @@ function wait(ms) {
 
 function startAmbientHearts() {
 
-  if (ambientHeartInterval) {
+  if (
+    ambientHeartInterval
+  ) {
+
     clearInterval(
       ambientHeartInterval
     );
+
   }
 
 
@@ -530,13 +847,22 @@ function startAmbientHearts() {
 }
 
 
+
+/* =========================================
+   CREATE FLOATING HEART
+========================================= */
+
 function createFloatingHeart() {
 
   const heart =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   heart.className =
     "floating-heart";
+
 
   heart.textContent =
     Math.random() > 0.5
@@ -544,27 +870,38 @@ function createFloatingHeart() {
       : "♥";
 
 
+
   const left =
     Math.random() * 100;
 
+
   const size =
-    10 + Math.random() * 13;
+    10 +
+    Math.random() * 13;
+
 
   const duration =
-    7 + Math.random() * 7;
+    7 +
+    Math.random() * 7;
+
 
   const drift =
-    (Math.random() - 0.5) * 160;
+    (Math.random() - 0.5) *
+    160;
+
 
 
   heart.style.left =
     `${left}%`;
 
+
   heart.style.fontSize =
     `${size}px`;
 
+
   heart.style.animationDuration =
     `${duration}s`;
+
 
   heart.style.setProperty(
     "--drift",
@@ -572,9 +909,11 @@ function createFloatingHeart() {
   );
 
 
+
   heartContainer.appendChild(
     heart
   );
+
 
 
   setTimeout(
@@ -583,6 +922,7 @@ function createFloatingHeart() {
   );
 
 }
+
 
 
 /* =========================================
@@ -594,8 +934,10 @@ function createHeartBurst() {
   const centerX =
     window.innerWidth / 2;
 
+
   const centerY =
     window.innerHeight / 2;
+
 
 
   for (
@@ -605,10 +947,14 @@ function createHeartBurst() {
   ) {
 
     const heart =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
+
 
     heart.className =
       "burst-heart";
+
 
     heart.textContent =
       Math.random() > 0.4
@@ -616,11 +962,14 @@ function createHeartBurst() {
         : "♡";
 
 
+
     heart.style.left =
       `${centerX}px`;
 
+
     heart.style.top =
       `${centerY}px`;
+
 
 
     const angle =
@@ -628,18 +977,22 @@ function createHeartBurst() {
       Math.PI *
       2;
 
+
     const distance =
       100 +
       Math.random() * 250;
+
 
 
     const x =
       Math.cos(angle) *
       distance;
 
+
     const y =
       Math.sin(angle) *
       distance;
+
 
 
     heart.style.setProperty(
@@ -647,15 +1000,18 @@ function createHeartBurst() {
       `${x}px`
     );
 
+
     heart.style.setProperty(
       "--y",
       `${y}px`
     );
 
 
+
     heartContainer.appendChild(
       heart
     );
+
 
 
     setTimeout(
@@ -668,14 +1024,21 @@ function createHeartBurst() {
 }
 
 
+
 /* =========================================
    MUSIC SETUP
 ========================================= */
 
 function setupMusic() {
 
-  birthdayMusic.volume = 0.45;
+  birthdayMusic.volume =
+    0.45;
 
+
+
+  /*
+    Tombol play/pause
+  */
 
   musicButton.addEventListener(
     "click",
@@ -683,18 +1046,30 @@ function setupMusic() {
   );
 
 
+
+  /*
+    Jika audio selesai.
+    Biasanya tidak terpanggil karena
+    audio menggunakan loop, tetapi
+    tetap kita siapkan.
+  */
+
   birthdayMusic.addEventListener(
     "ended",
     () => {
 
-      musicPlaying = false;
+      musicPlaying =
+        false;
+
 
       musicButton.textContent =
         "▶";
 
+
       musicButton.classList.remove(
         "playing"
       );
+
 
       musicTitle.textContent =
         "Our Special Song";
@@ -702,7 +1077,77 @@ function setupMusic() {
     }
   );
 
+
+
+  /*
+    Jika browser berhasil memutar audio
+    secara langsung.
+  */
+
+  birthdayMusic.addEventListener(
+    "play",
+    () => {
+
+      musicPlaying =
+        true;
+
+
+      musicButton.textContent =
+        "❚❚";
+
+
+      musicButton.classList.add(
+        "playing"
+      );
+
+
+      musicTitle.textContent =
+        "Now playing ♡";
+
+    }
+  );
+
+
+
+  /*
+    Jika audio dipause.
+  */
+
+  birthdayMusic.addEventListener(
+    "pause",
+    () => {
+
+      /*
+        Jangan ubah UI saat audio
+        belum pernah dimainkan.
+      */
+
+      if (
+        birthdayMusic.currentTime === 0
+      ) {
+
+        return;
+
+      }
+
+
+      musicPlaying =
+        false;
+
+
+      musicButton.textContent =
+        "▶";
+
+
+      musicButton.classList.remove(
+        "playing"
+      );
+
+    }
+  );
+
 }
+
 
 
 /* =========================================
@@ -711,32 +1156,55 @@ function setupMusic() {
 
 async function toggleMusic() {
 
-  if (birthdayMusic.paused) {
+  /*
+    PLAY
+  */
+
+  if (
+    birthdayMusic.paused
+  ) {
 
     try {
 
-      await birthdayMusic.play();
+      const playPromise =
+        birthdayMusic.play();
 
-      musicPlaying = true;
+
+      if (
+        playPromise !== undefined
+      ) {
+
+        await playPromise;
+
+      }
+
+
+      musicPlaying =
+        true;
+
 
       musicButton.textContent =
         "❚❚";
 
+
       musicButton.classList.add(
         "playing"
       );
+
 
       musicTitle.textContent =
         "Now playing ♡";
 
     }
 
+
     catch (error) {
 
-      console.log(
+      console.error(
         "Music could not start:",
         error
       );
+
 
       musicTitle.textContent =
         "Tap play to start ♡";
@@ -745,18 +1213,28 @@ async function toggleMusic() {
 
   }
 
+
+  /*
+    PAUSE
+  */
+
   else {
 
     birthdayMusic.pause();
 
-    musicPlaying = false;
+
+    musicPlaying =
+      false;
+
 
     musicButton.textContent =
       "▶";
 
+
     musicButton.classList.remove(
       "playing"
     );
+
 
     musicTitle.textContent =
       "Paused";
@@ -766,87 +1244,16 @@ async function toggleMusic() {
 }
 
 
-/* =========================================
-   START MUSIC WITH FADE IN
-========================================= */
-
-async function startMusicWithFade() {
-
-  try {
-
-    birthdayMusic.volume = 0;
-
-    await birthdayMusic.play();
-
-    musicPlaying = true;
-
-    musicButton.textContent =
-      "❚❚";
-
-    musicButton.classList.add(
-      "playing"
-    );
-
-    musicTitle.textContent =
-      "Now playing ♡";
-
-
-    let volume = 0;
-
-
-    const fadeIn =
-      setInterval(
-        () => {
-
-          volume += 0.025;
-
-          birthdayMusic.volume =
-            Math.min(
-              volume,
-              0.45
-            );
-
-
-          if (
-            volume >= 0.45
-          ) {
-
-            clearInterval(
-              fadeIn
-            );
-
-          }
-
-        },
-        100
-      );
-
-  }
-
-  catch (error) {
-
-    /*
-      Browser bisa memblokir autoplay.
-      User tetap bisa menekan tombol play.
-    */
-
-    console.log(
-      "Autoplay blocked:",
-      error
-    );
-
-    birthdayMusic.volume = 0.45;
-
-  }
-
-}
-
 
 /* =========================================
    BIRTHDAY TRANSITION
 ========================================= */
 
 async function transitionToBirthday() {
+
+  /*
+    Sembunyikan surat.
+  */
 
   letterView.classList.remove(
     "visible"
@@ -856,6 +1263,10 @@ async function transitionToBirthday() {
   await wait(500);
 
 
+  /*
+    Tampilkan birthday page.
+  */
+
   birthdayScene.classList.add(
     "visible"
   );
@@ -864,18 +1275,22 @@ async function transitionToBirthday() {
   await wait(800);
 
 
+  /*
+    Heart burst.
+  */
+
   createHeartBurst();
 
 
   /*
-    Coba mulai musik otomatis.
-    Kalau browser memblokir autoplay,
-    tombol musik tetap bisa digunakan.
+    TIDAK ADA play() DI SINI.
+
+    Musik sudah dimulai ketika user
+    pertama kali menekan Open the letter.
   */
 
-  await startMusicWithFade();
-
 }
+
 
 
 /* =========================================
@@ -889,15 +1304,18 @@ function setupLightbox() {
       "photoLightbox"
     );
 
+
   const lightboxImage =
     document.getElementById(
       "lightboxImage"
     );
 
+
   const lightboxCaption =
     document.getElementById(
       "lightboxCaption"
     );
+
 
   const closeLightbox =
     document.getElementById(
@@ -905,10 +1323,12 @@ function setupLightbox() {
     );
 
 
+
   const polaroids =
     document.querySelectorAll(
       ".polaroid"
     );
+
 
 
   polaroids.forEach(
@@ -921,12 +1341,15 @@ function setupLightbox() {
           const image =
             polaroid.dataset.image;
 
+
           const caption =
-            polaroid.dataset.caption;
+            polaroid.dataset.caption ||
+            "";
 
 
           lightboxImage.src =
             image;
+
 
           lightboxCaption.textContent =
             caption;
@@ -943,6 +1366,11 @@ function setupLightbox() {
   );
 
 
+
+  /*
+    Close lightbox
+  */
+
   function closePhoto() {
 
     photoLightbox.classList.remove(
@@ -952,11 +1380,17 @@ function setupLightbox() {
   }
 
 
+
   closeLightbox.addEventListener(
     "click",
     closePhoto
   );
 
+
+
+  /*
+    Klik background untuk close.
+  */
 
   photoLightbox.addEventListener(
     "click",
@@ -974,6 +1408,11 @@ function setupLightbox() {
     }
   );
 
+
+
+  /*
+    ESC untuk desktop.
+  */
 
   document.addEventListener(
     "keydown",
@@ -993,6 +1432,7 @@ function setupLightbox() {
 }
 
 
+
 /* =========================================
    RESET MUSIC
 ========================================= */
@@ -1001,23 +1441,33 @@ function resetMusic() {
 
   birthdayMusic.pause();
 
-  birthdayMusic.currentTime = 0;
 
-  birthdayMusic.volume = 0.45;
+  birthdayMusic.currentTime =
+    0;
 
-  musicPlaying = false;
+
+  birthdayMusic.volume =
+    0.45;
+
+
+  musicPlaying =
+    false;
+
 
   musicButton.textContent =
     "▶";
+
 
   musicButton.classList.remove(
     "playing"
   );
 
+
   musicTitle.textContent =
     "Our Special Song";
 
 }
+
 
 
 /* =========================================
@@ -1026,39 +1476,63 @@ function resetMusic() {
 
 function replayExperience() {
 
-  typingCancelled = true;
+  /*
+    Batalkan typing yang sedang berlangsung.
+  */
 
-  hasOpened = false;
+  typingCancelled =
+    true;
 
 
-  /* reset music */
+  /*
+    Izinkan surat dibuka kembali.
+  */
+
+  hasOpened =
+    false;
+
+
+
+  /*
+    Reset music.
+  */
 
   resetMusic();
 
 
-  /* reset letter */
+
+  /*
+    Reset letter.
+  */
 
   letterGreeting.textContent =
     "";
 
+
   letterBody.innerHTML =
     "";
+
 
   letterEnding.textContent =
     "";
 
 
-  /* reset envelope */
+
+  /*
+    Reset envelope.
+  */
 
   const flap =
     document.querySelector(
       ".envelope-flap"
     );
 
+
   const preview =
     document.querySelector(
       ".letter-preview"
     );
+
 
 
   flap.style.transform =
@@ -1068,37 +1542,56 @@ function replayExperience() {
   preview.style.transform =
     "translateY(0)";
 
+
   preview.style.opacity =
     "1";
 
 
-  /* reset visibility */
+
+  /*
+    Reset visibility.
+  */
 
   birthdayScene.classList.remove(
     "visible"
   );
 
+
   letterView.classList.remove(
     "visible"
   );
+
 
   letterScene.classList.remove(
     "hidden"
   );
 
 
+
+  /*
+    Reset Open button.
+  */
+
   openButton.style.opacity =
     "1";
+
 
   openButton.style.pointerEvents =
     "auto";
 
 
-  /* scroll to top */
 
-  birthdayScene.scrollTop = 0;
+  /*
+    Reset scroll.
+  */
+
+  window.scrollTo(
+    0,
+    0
+  );
 
 }
+
 
 
 /* =========================================
