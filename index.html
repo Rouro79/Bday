@@ -1,74 +1,38 @@
-u<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#140b13">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  >
+  <title>For Chibiii ♡</title>
 
-  <meta
-    name="theme-color"
-    content="#140b13"
-  >
-
-  <title>For Someone Special 💌</title>
-
-  <!-- GOOGLE FONTS -->
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet"
-  >
-
-  <link
-    rel="stylesheet"
-    href="style.css?v=3"
-  >
+  <link rel="stylesheet" href="style.css?v=10">
 </head>
-
 
 <body>
 
   <!-- BACKGROUND -->
-
   <div class="background-glow"></div>
-
   <div class="grain"></div>
 
-  <div
-    id="particles"
-    class="particles"
-  ></div>
+  <!-- HEART PARTICLES -->
+  <div id="heartContainer" class="heart-container"></div>
 
 
-  <!-- MAIN APP -->
-
-  <main class="app">
+  <main id="app">
 
 
     <!-- ==================================================
-         ENVELOPE SCENE
+         SCENE 1 : ENVELOPE
     ================================================== -->
 
-    <section
-      id="letterScene"
-      class="scene active"
-    >
+    <section id="letterScene" class="scene active">
 
       <div class="intro-copy">
 
         <span class="eyebrow">
-          A little something for you
+          A LITTLE SOMETHING FOR YOU
         </span>
 
         <h2>
@@ -77,8 +41,6 @@ u<!DOCTYPE html>
 
       </div>
 
-
-      <!-- ENVELOPE -->
 
       <div
         id="envelope"
@@ -93,22 +55,13 @@ u<!DOCTYPE html>
         <div class="envelope-back"></div>
 
 
+        <!-- SURAT DI DALAM AMPLOP -->
+
         <div class="letter-preview">
 
           <div class="preview-line"></div>
-
           <div class="preview-line short"></div>
-
           <div class="preview-line"></div>
-
-        </div>
-
-
-        <div class="envelope-paper">
-
-          <div class="paper-heart">
-            ♥
-          </div>
 
         </div>
 
@@ -117,25 +70,21 @@ u<!DOCTYPE html>
 
         <div class="envelope-flap"></div>
 
+
+        <div class="envelope-heart">
+          ♥
+        </div>
+
       </div>
 
-
-      <!-- OPEN BUTTON -->
 
       <button
         id="openButton"
         class="open-button"
         type="button"
       >
-
-        <span>
-          Open the letter
-        </span>
-
-        <span class="arrow">
-          ↓
-        </span>
-
+        <span>Open the letter</span>
+        <span>↓</span>
       </button>
 
     </section>
@@ -143,18 +92,15 @@ u<!DOCTYPE html>
 
 
     <!-- ==================================================
-         LETTER VIEW
+         SCENE 2 : LETTER
     ================================================== -->
 
     <section
       id="letterView"
-      class="letter-view"
+      class="scene letter-view"
     >
 
-      <article
-        id="letterPaper"
-        class="letter-paper"
-      >
+      <article class="letter-paper">
 
         <div class="paper-decoration top-left">
           ✦
@@ -167,10 +113,9 @@ u<!DOCTYPE html>
 
         <div class="letter-header">
 
-          <span
-            id="letterDate"
-            class="letter-date"
-          ></span>
+          <span id="letterDate">
+            A little letter from my heart
+          </span>
 
         </div>
 
@@ -207,16 +152,15 @@ u<!DOCTYPE html>
 
 
     <!-- ==================================================
-         BIRTHDAY SCENE
+         SCENE 3 : BIRTHDAY
     ================================================== -->
 
     <section
       id="birthdayScene"
-      class="birthday-scene"
+      class="scene birthday-scene"
     >
 
       <div class="birthday-inner">
-
 
         <div class="birthday-stars">
           ✦　♡　✦
@@ -224,18 +168,13 @@ u<!DOCTYPE html>
 
 
         <span class="birthday-eyebrow">
-          Today is your special day
+          TODAY IS YOUR SPECIAL DAY
         </span>
 
 
         <h1 class="birthday-title">
-
           Happy Birthday
-
-          <span>
-            ♡
-          </span>
-
+          <span>♡</span>
         </h1>
 
 
@@ -243,7 +182,6 @@ u<!DOCTYPE html>
           id="birthdayMessage"
           class="birthday-message"
         ></p>
-
 
 
         <!-- MUSIC -->
@@ -254,11 +192,9 @@ u<!DOCTYPE html>
             id="musicButton"
             class="music-button"
             type="button"
-            aria-label="Play music"
           >
             ▶
           </button>
-
 
           <div class="music-info">
 
@@ -275,19 +211,15 @@ u<!DOCTYPE html>
 
           </div>
 
-
           <div class="music-waves">
-
             <span></span>
             <span></span>
             <span></span>
             <span></span>
             <span></span>
-
           </div>
 
         </div>
-
 
 
         <!-- SCRAPBOOK -->
@@ -297,7 +229,7 @@ u<!DOCTYPE html>
           <div class="scrapbook-heading">
 
             <span>
-              ✦ little memories ✦
+              ✦ LITTLE MEMORIES ✦
             </span>
 
             <h2>
@@ -326,18 +258,15 @@ u<!DOCTYPE html>
               <div class="tape"></div>
 
               <div class="polaroid-image">
-
                 <img
                   src="photos/photo1.jpg"
                   alt="Memory 1"
                 >
-
               </div>
 
               <span class="polaroid-caption"></span>
 
             </button>
-
 
 
             <!-- PHOTO 2 -->
@@ -352,12 +281,10 @@ u<!DOCTYPE html>
               <div class="tape"></div>
 
               <div class="polaroid-image">
-
                 <img
                   src="photos/photo2.jpg"
                   alt="Memory 2"
                 >
-
               </div>
 
               <span class="polaroid-caption">
@@ -366,7 +293,6 @@ u<!DOCTYPE html>
               </span>
 
             </button>
-
 
 
             <!-- PHOTO 3 -->
@@ -381,18 +307,15 @@ u<!DOCTYPE html>
               <div class="tape"></div>
 
               <div class="polaroid-image">
-
                 <img
                   src="photos/photo3.jpg"
                   alt="Memory 3"
                 >
-
               </div>
 
               <span class="polaroid-caption"></span>
 
             </button>
-
 
 
             <!-- PHOTO 4 -->
@@ -407,12 +330,10 @@ u<!DOCTYPE html>
               <div class="tape"></div>
 
               <div class="polaroid-image">
-
                 <img
                   src="photos/photo4.jpg"
                   alt="Memory 4"
                 >
-
               </div>
 
               <span class="polaroid-caption"></span>
@@ -422,7 +343,6 @@ u<!DOCTYPE html>
           </div>
 
         </section>
-
 
 
         <!-- FINAL MESSAGE -->
@@ -440,8 +360,6 @@ u<!DOCTYPE html>
         </div>
 
 
-        <!-- REPLAY -->
-
         <button
           id="replayButton"
           class="replay-button"
@@ -458,16 +376,9 @@ u<!DOCTYPE html>
 
 
 
-  <!-- HEARTS -->
-
-  <div
-    id="heartContainer"
-    class="heart-container"
-  ></div>
-
-
-
-  <!-- PHOTO LIGHTBOX -->
+  <!-- ==================================================
+       LIGHTBOX
+  ================================================== -->
 
   <div
     id="photoLightbox"
@@ -478,11 +389,9 @@ u<!DOCTYPE html>
       id="closeLightbox"
       class="close-lightbox"
       type="button"
-      aria-label="Close"
     >
       ×
     </button>
-
 
     <div class="lightbox-content">
 
@@ -500,110 +409,29 @@ u<!DOCTYPE html>
 
 
 
-  <!-- AUDIO -->
+  <!-- ==================================================
+       AUDIO
+  ================================================== -->
 
   <audio
     id="birthdayMusic"
     loop
     preload="auto"
   >
-
     <source
       src="music/18.mp3"
       type="audio/mpeg"
     >
-
   </audio>
 
 
 
   <!-- SCRIPT -->
 
-  <script src="script.js?v=3"></script>
+  <script src="script.js?v=10"></script>
 
 </body>
-</html>    href="https://fonts.gstatic.com"
-    crossorigin
-  >
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet"
-  >
-
-
-  <!-- CSS -->
-
-  <link
-    rel="stylesheet"
-    href="style.css?v=5"
-  >
-
-</head>
-
-
-<body>
-
-
-  <!-- =====================================
-       BACKGROUND
-  ====================================== -->
-
-  <div class="background-glow"></div>
-
-  <div class="grain"></div>
-
-  <div id="particles"></div>
-
-
-  <!-- =====================================
-       MAIN APP
-  ====================================== -->
-
-  <main class="app">
-
-
-    <!-- =====================================
-         LETTER INTRO
-    ====================================== -->
-
-    <section
-      id="letterScene"
-      class="scene active"
-    >
-
-      <div class="intro-copy">
-
-        <span class="eyebrow">
-          A little something for you
-        </span>
-
-        <h2>
-          Someone special is waiting...
-        </h2>
-
-      </div>
-
-
-      <!-- ENVELOPE -->
-
-      <div
-        id="envelope"
-        class="envelope"
-        role="button"
-        tabindex="0"
-        aria-label="Buka surat"
-      >
-
-        <div class="envelope-glow"></div>
-
-
-        <div class="envelope-back"></div>
-
-
-        <div class="letter-preview">
-
-          <div class="preview-line"></div>
+</html>    <div class="preview-line"></div>
 
           <div class="preview-line short"></div>
 
