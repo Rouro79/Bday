@@ -1,37 +1,88 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#140b13" />
 
-  <title>For Someone Special 💌</title>
+  <meta charset="UTF-8">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#140b13"
+  >
+
+  <meta
+    name="description"
+    content="A little birthday letter made with love."
+  >
+
+  <title>
+    For Someone Special 💌
+  </title>
+
+
+  <!-- GOOGLE FONTS -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Inter:wght@400;500;600&display=swap"
     rel="stylesheet"
-  />
+  >
 
-  <link rel="stylesheet" href="style.css" />
+
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="style.css?v=5"
+  >
+
 </head>
+
 
 <body>
 
+
+  <!-- =====================================
+       BACKGROUND
+  ====================================== -->
+
   <div class="background-glow"></div>
+
   <div class="grain"></div>
 
   <div id="particles"></div>
 
+
+  <!-- =====================================
+       MAIN APP
+  ====================================== -->
+
   <main class="app">
+
 
     <!-- =====================================
          LETTER INTRO
     ====================================== -->
 
-    <section id="letterScene" class="scene active">
+    <section
+      id="letterScene"
+      class="scene active"
+    >
 
       <div class="intro-copy">
 
@@ -58,15 +109,20 @@
 
         <div class="envelope-glow"></div>
 
+
         <div class="envelope-back"></div>
+
 
         <div class="letter-preview">
 
           <div class="preview-line"></div>
+
           <div class="preview-line short"></div>
+
           <div class="preview-line"></div>
 
         </div>
+
 
         <div class="envelope-paper">
 
@@ -76,12 +132,16 @@
 
         </div>
 
+
         <div class="envelope-front"></div>
+
 
         <div class="envelope-flap"></div>
 
       </div>
 
+
+      <!-- OPEN BUTTON -->
 
       <button
         id="openButton"
@@ -107,12 +167,18 @@
          LETTER VIEW
     ====================================== -->
 
-    <section id="letterView" class="letter-view">
+    <section
+      id="letterView"
+      class="letter-view"
+    >
 
       <article
         id="letterPaper"
         class="letter-paper"
       >
+
+
+        <!-- DECORATION -->
 
         <div class="paper-decoration top-left">
           ✦
@@ -123,24 +189,30 @@
         </div>
 
 
+        <!-- HEADER -->
+
         <div class="letter-header">
 
           <span
-            class="letter-date"
             id="letterDate"
+            class="letter-date"
           ></span>
 
         </div>
 
 
+        <!-- CONTENT -->
+
         <div class="letter-content">
 
           <h1 id="letterGreeting"></h1>
+
 
           <div
             id="letterBody"
             class="letter-body"
           ></div>
+
 
           <div
             id="letterEnding"
@@ -149,6 +221,8 @@
 
         </div>
 
+
+        <!-- DECORATION -->
 
         <div class="paper-decoration bottom-left">
           ♡
@@ -175,7 +249,8 @@
 
       <div class="birthday-inner">
 
-        <!-- TOP DECORATION -->
+
+        <!-- STARS -->
 
         <div class="birthday-stars">
           ✦　♡　✦
@@ -187,6 +262,7 @@
         <span class="birthday-eyebrow">
           Today is your special day
         </span>
+
 
         <h1 class="birthday-title">
 
@@ -207,7 +283,7 @@
 
 
         <!-- =================================
-             MUSIC PLAYER
+             MUSIC
         ================================== -->
 
         <div class="music-player">
@@ -294,12 +370,12 @@
                 <img
                   src="photos/photo1.jpg"
                   alt="Memory 1"
-                />
+                  loading="lazy"
+                >
 
               </div>
 
-              <span class="polaroid-caption">
-              </span>
+              <span class="polaroid-caption"></span>
 
             </button>
 
@@ -311,7 +387,7 @@
               class="polaroid polaroid-2"
               type="button"
               data-image="photos/photo2.jpg"
-              data-caption="AIB INI AKAN TERUS TERPAMPANG BWAHAHAHAHHAHAHAHAHHA."
+              data-caption="AIB INI AKAN TERUS TERPAMPANG BWAHAHAHAHAHAHA."
             >
 
               <div class="tape"></div>
@@ -321,13 +397,14 @@
                 <img
                   src="photos/photo2.jpg"
                   alt="Memory 2"
-                />
+                  loading="lazy"
+                >
 
               </div>
 
               <span class="polaroid-caption">
                 AIB INI AKAN TERUS TERPAMPANG
-                BWAHAHAHAHHAHAHAHAHHA
+                BWAHAHAHAHAHAHA
               </span>
 
             </button>
@@ -350,12 +427,12 @@
                 <img
                   src="photos/photo3.jpg"
                   alt="Memory 3"
-                />
+                  loading="lazy"
+                >
 
               </div>
 
-              <span class="polaroid-caption">
-              </span>
+              <span class="polaroid-caption"></span>
 
             </button>
 
@@ -377,12 +454,12 @@
                 <img
                   src="photos/photo4.jpg"
                   alt="Memory 4"
-                />
+                  loading="lazy"
+                >
 
               </div>
 
-              <span class="polaroid-caption">
-              </span>
+              <span class="polaroid-caption"></span>
 
             </button>
 
@@ -401,7 +478,8 @@
           </span>
 
           <strong>
-            Untuk kamu yang telah menemani waktu kosongku dan memberi warna ke hari hariku ♡
+            Untuk kamu yang telah menemani waktu kosongku
+            dan memberi warna ke hari hariku ♡
           </strong>
 
         </div>
@@ -428,7 +506,7 @@
 
 
   <!-- =====================================
-       HEART PARTICLES
+       HEART CONTAINER
   ====================================== -->
 
   <div
@@ -463,7 +541,7 @@
         id="lightboxImage"
         src=""
         alt="Selected memory"
-      />
+      >
 
       <p id="lightboxCaption"></p>
 
@@ -486,13 +564,18 @@
     <source
       src="music/18.mp3"
       type="audio/mpeg"
-    />
+    >
 
   </audio>
 
 
 
+  <!-- =====================================
+       JAVASCRIPT
+  ====================================== -->
+
   <script src="script.js?v=5"></script>
 
 </body>
+
 </html>
