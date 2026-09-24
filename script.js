@@ -74,12 +74,6 @@ const heartContainer =
 const replayButton =
   document.getElementById("replayButton");
 
-
-
-/* =========================================
-   MUSIC
-========================================= */
-
 const birthdayMusic =
   document.getElementById("birthdayMusic");
 
@@ -88,8 +82,6 @@ const musicButton =
 
 const musicTitle =
   document.getElementById("musicTitle");
-
-let musicPlaying = false;
 
 
 
@@ -102,6 +94,8 @@ let hasOpened = false;
 let typingCancelled = false;
 
 let ambientHeartInterval = null;
+
+let musicPlaying = false;
 
 
 
@@ -135,17 +129,24 @@ function initialize() {
 
 function setupInteractions() {
 
+
+  /* OPEN BUTTON */
+
   openButton.addEventListener(
     "click",
     handleOpenLetter
   );
 
 
+  /* ENVELOPE */
+
   envelope.addEventListener(
     "click",
     handleOpenLetter
   );
 
+
+  /* KEYBOARD */
 
   envelope.addEventListener(
     "keydown",
@@ -166,6 +167,8 @@ function setupInteractions() {
   );
 
 
+  /* REPLAY */
+
   replayButton.addEventListener(
     "click",
     replayExperience
@@ -176,23 +179,29 @@ function setupInteractions() {
 
 
 /* =========================================
-   HANDLE OPEN LETTER
+   HANDLE OPEN
 ========================================= */
 
 function handleOpenLetter() {
 
   if (hasOpened) {
+
     return;
+
   }
 
 
   /*
-    Musik harus dimulai langsung
-    dari gesture user.
+    Musik dipanggil langsung
+    dari tap user.
   */
 
   startMusicFromUserGesture();
 
+
+  /*
+    Jalankan animasi.
+  */
 
   openLetter();
 
@@ -201,7 +210,7 @@ function handleOpenLetter() {
 
 
 /* =========================================
-   START MUSIC FROM USER GESTURE
+   START MUSIC
 ========================================= */
 
 function startMusicFromUserGesture() {
@@ -211,47 +220,32 @@ function startMusicFromUserGesture() {
   birthdayMusic.volume = 0.45;
 
 
-  const playPromise =
+  const promise =
     birthdayMusic.play();
 
 
   if (
-    playPromise !== undefined
+    promise !== undefined
   ) {
 
-    playPromise
+    promise
       .then(() => {
 
         musicPlaying = true;
 
-        musicButton.textContent =
-          "❚❚";
-
-        musicButton.classList.add(
-          "playing"
-        );
-
-        musicTitle.textContent =
-          "Now playing ♡";
+        updateMusicUI();
 
       })
 
 
       .catch(error => {
 
-        console.error(
-          "Music gagal diputar:",
+        console.log(
+          "Music autoplay blocked:",
           error
         );
 
         musicPlaying = false;
-
-        musicButton.textContent =
-          "▶";
-
-        musicButton.classList.remove(
-          "playing"
-        );
 
         musicTitle.textContent =
           "Tap ▶ untuk memutar musik ♡";
@@ -271,7 +265,9 @@ function startMusicFromUserGesture() {
 async function openLetter() {
 
   if (hasOpened) {
+
     return;
+
   }
 
 
@@ -282,12 +278,13 @@ async function openLetter() {
 
 
   /* =====================================
-     HIDE OPEN BUTTON
+     HIDE BUTTON
   ====================================== */
 
   openButton.style.opacity = "0";
 
-  openButton.style.pointerEvents = "none";
+  openButton.style.pointerEvents =
+    "none";
 
 
 
@@ -296,40 +293,50 @@ async function openLetter() {
   ====================================== */
 
   envelope.animate(
+
     [
+
       {
-        transform: "scale(1)"
+        transform:
+          "scale(1)"
       },
 
       {
-        transform: "scale(0.96)"
+        transform:
+          "scale(.96)"
       },
 
       {
-        transform: "scale(1.02)"
+        transform:
+          "scale(1.02)"
       },
 
       {
-        transform: "scale(1)"
+        transform:
+          "scale(1)"
       }
 
     ],
+
     {
+
       duration: 350,
 
       easing:
         "cubic-bezier(.34,1.56,.64,1)"
+
     }
+
   );
 
 
 
-  await wait(250);
+  await wait(300);
 
 
 
   /* =====================================
-     OPEN FLAP
+     FLAP
   ====================================== */
 
   const flap =
@@ -343,12 +350,12 @@ async function openLetter() {
 
 
 
-  await wait(550);
+  await wait(650);
 
 
 
   /* =====================================
-     LETTER RISES
+     LETTER PREVIEW RISE
   ====================================== */
 
   const preview =
@@ -357,40 +364,47 @@ async function openLetter() {
     );
 
 
-  if (preview) {
+  preview.animate(
 
-    preview.animate(
-      [
-        {
-          transform:
-            "translateY(0)",
+    [
 
-          opacity: 1
-        },
-
-        {
-          transform:
-            "translateY(-150px) scale(1.05)",
-
-          opacity: 1
-        }
-
-      ],
       {
-        duration: 900,
 
-        easing:
-          "cubic-bezier(.16,1,.3,1)",
+        transform:
+          "translateY(0)",
 
-        fill: "forwards"
+        opacity: 1
+
+      },
+
+      {
+
+        transform:
+          "translateY(-150px) scale(1.05)",
+
+        opacity: 1
+
       }
-    );
 
-  }
+    ],
+
+    {
+
+      duration: 900,
+
+      easing:
+        "cubic-bezier(.16,1,.3,1)",
+
+      fill:
+        "forwards"
+
+    }
+
+  );
 
 
 
-  await wait(650);
+  await wait(800);
 
 
 
@@ -402,33 +416,10 @@ async function openLetter() {
     "active"
   );
 
+
   letterView.classList.add(
     "active"
   );
-
-
-
-  await wait(900);
-
-
-
-  /* =====================================
-     TYPE GREETING
-  ====================================== */
-
-  await typeGreeting();
-
-
-
-  await wait(450);
-
-
-
-  /* =====================================
-     TYPE BODY
-  ====================================== */
-
-  await typeBody();
 
 
 
@@ -437,7 +428,31 @@ async function openLetter() {
 
 
   /* =====================================
-     TYPE ENDING
+     GREETING
+  ====================================== */
+
+  await typeGreeting();
+
+
+
+  await wait(600);
+
+
+
+  /* =====================================
+     BODY
+  ====================================== */
+
+  await typeBody();
+
+
+
+  await wait(800);
+
+
+
+  /* =====================================
+     ENDING
   ====================================== */
 
   await typeEnding();
@@ -456,7 +471,7 @@ async function openLetter() {
 
 
 
-  await wait(1800);
+  await wait(1700);
 
 
 
@@ -471,7 +486,7 @@ async function openLetter() {
 
 
 /* =========================================
-   TYPE GREETING
+   GREETING
 ========================================= */
 
 async function typeGreeting() {
@@ -480,9 +495,13 @@ async function typeGreeting() {
 
 
   await typeRichText(
+
     letterGreeting,
+
     CONFIG.greeting,
+
     75
+
   );
 
 }
@@ -490,7 +509,7 @@ async function typeGreeting() {
 
 
 /* =========================================
-   TYPE BODY
+   BODY
 ========================================= */
 
 async function typeBody() {
@@ -504,7 +523,9 @@ async function typeBody() {
   ) {
 
     if (typingCancelled) {
+
       return;
+
     }
 
 
@@ -517,13 +538,17 @@ async function typeBody() {
 
     /*
       45ms per karakter.
-      Lebih pelan dari versi sebelumnya.
+      Lebih pelan agar nyaman dibaca.
     */
 
     await typeRichText(
+
       p,
+
       paragraph,
+
       45
+
     );
 
 
@@ -540,7 +565,7 @@ async function typeBody() {
 
 
 /* =========================================
-   TYPE ENDING
+   ENDING
 ========================================= */
 
 async function typeEnding() {
@@ -549,9 +574,13 @@ async function typeEnding() {
 
 
   await typeRichText(
+
     letterEnding,
+
     CONFIG.ending,
+
     70
+
   );
 
 }
@@ -559,7 +588,7 @@ async function typeEnding() {
 
 
 /* =========================================
-   TYPE RICH TEXT
+   RICH TEXT TYPING
 ========================================= */
 
 async function typeRichText(
@@ -567,6 +596,7 @@ async function typeRichText(
   html,
   delay = 45
 ) {
+
 
   const temp =
     document.createElement("div");
@@ -582,13 +612,16 @@ async function typeRichText(
     parent
   ) {
 
+
     if (typingCancelled) {
+
       return;
+
     }
 
 
     /* =====================================
-       TEXT NODE
+       TEXT
     ====================================== */
 
     if (
@@ -596,28 +629,36 @@ async function typeRichText(
       Node.TEXT_NODE
     ) {
 
+
       for (
         const character
         of node.textContent
       ) {
 
+
         if (typingCancelled) {
+
           return;
+
         }
 
 
         parent.appendChild(
+
           document.createTextNode(
             character
           )
+
         );
 
 
         await wait(
+
           getTypingDelay(
             character,
             delay
           )
+
         );
 
       }
@@ -630,7 +671,7 @@ async function typeRichText(
 
 
     /* =====================================
-       HTML ELEMENT
+       ELEMENT
     ====================================== */
 
     if (
@@ -638,19 +679,19 @@ async function typeRichText(
       Node.ELEMENT_NODE
     ) {
 
+
       const clone =
         node.cloneNode(false);
 
 
-      parent.appendChild(
-        clone
-      );
+      parent.appendChild(clone);
 
 
       for (
         const child
         of node.childNodes
       ) {
+
 
         await processNode(
           child,
@@ -669,6 +710,7 @@ async function typeRichText(
     const child
     of temp.childNodes
   ) {
+
 
     await processNode(
       child,
@@ -690,10 +732,8 @@ function getTypingDelay(
   base
 ) {
 
-  /*
-    Titik / tanda seru / tanda tanya
-    berhenti cukup lama.
-  */
+
+  /* TITIK */
 
   if (
     character === "." ||
@@ -706,9 +746,7 @@ function getTypingDelay(
   }
 
 
-  /*
-    Koma berhenti sebentar.
-  */
+  /* KOMA */
 
   if (
     character === ","
@@ -719,9 +757,7 @@ function getTypingDelay(
   }
 
 
-  /*
-    Titik dua / titik koma.
-  */
+  /* COLON / SEMICOLON */
 
   if (
     character === ":" ||
@@ -733,22 +769,16 @@ function getTypingDelay(
   }
 
 
-  /*
-    Spasi lebih cepat.
-  */
+  /* SPACE */
 
   if (
     character === " "
   ) {
 
-    return base * 0.5;
+    return base * .5;
 
   }
 
-
-  /*
-    Karakter biasa.
-  */
 
   return base;
 
@@ -775,10 +805,11 @@ function wait(ms) {
 
 
 /* =========================================
-   HEART PARTICLES
+   AMBIENT HEARTS
 ========================================= */
 
 function startAmbientHearts() {
+
 
   if (
     ambientHeartInterval
@@ -793,8 +824,11 @@ function startAmbientHearts() {
 
   ambientHeartInterval =
     setInterval(
+
       createFloatingHeart,
+
       2600
+
     );
 
 }
@@ -802,10 +836,11 @@ function startAmbientHearts() {
 
 
 /* =========================================
-   CREATE FLOATING HEART
+   FLOATING HEART
 ========================================= */
 
 function createFloatingHeart() {
+
 
   const heart =
     document.createElement(
@@ -813,16 +848,12 @@ function createFloatingHeart() {
     );
 
 
-  /*
-    Cocok dengan CSS baru.
-  */
-
   heart.className =
     "heart-particle";
 
 
   heart.textContent =
-    Math.random() > 0.5
+    Math.random() > .5
       ? "♡"
       : "♥";
 
@@ -842,9 +873,8 @@ function createFloatingHeart() {
 
 
   const drift =
-    (Math.random() - 0.5) *
+    (Math.random() - .5) *
     160;
-
 
 
   heart.style.left =
@@ -865,16 +895,17 @@ function createFloatingHeart() {
   );
 
 
-
   heartContainer.appendChild(
     heart
   );
 
 
-
   setTimeout(
+
     () => heart.remove(),
+
     duration * 1000
+
   );
 
 }
@@ -886,6 +917,7 @@ function createFloatingHeart() {
 ========================================= */
 
 function createHeartBurst() {
+
 
   const centerX =
     window.innerWidth / 2;
@@ -902,6 +934,7 @@ function createHeartBurst() {
     i++
   ) {
 
+
     const heart =
       document.createElement(
         "div"
@@ -913,10 +946,9 @@ function createHeartBurst() {
 
 
     heart.textContent =
-      Math.random() > 0.4
+      Math.random() > .4
         ? "♥"
         : "♡";
-
 
 
     heart.style.left =
@@ -927,7 +959,6 @@ function createHeartBurst() {
       `${centerY}px`;
 
 
-
     const angle =
       Math.random() *
       Math.PI *
@@ -936,8 +967,8 @@ function createHeartBurst() {
 
     const distance =
       100 +
-      Math.random() * 250;
-
+      Math.random() *
+      250;
 
 
     const x =
@@ -948,7 +979,6 @@ function createHeartBurst() {
     const y =
       Math.sin(angle) *
       distance;
-
 
 
     heart.style.setProperty(
@@ -963,16 +993,17 @@ function createHeartBurst() {
     );
 
 
-
     heartContainer.appendChild(
       heart
     );
 
 
-
     setTimeout(
+
       () => heart.remove(),
+
       1600
+
     );
 
   }
@@ -987,8 +1018,9 @@ function createHeartBurst() {
 
 function setupMusic() {
 
+
   birthdayMusic.volume =
-    0.45;
+    .45;
 
 
   musicButton.addEventListener(
@@ -1003,15 +1035,7 @@ function setupMusic() {
 
       musicPlaying = true;
 
-      musicButton.textContent =
-        "❚❚";
-
-      musicButton.classList.add(
-        "playing"
-      );
-
-      musicTitle.textContent =
-        "Now playing ♡";
+      updateMusicUI();
 
     }
   );
@@ -1042,25 +1066,51 @@ function setupMusic() {
     }
   );
 
+}
 
-  birthdayMusic.addEventListener(
-    "ended",
-    () => {
 
-      musicPlaying = false;
 
-      musicButton.textContent =
-        "▶";
+/* =========================================
+   MUSIC UI
+========================================= */
 
-      musicButton.classList.remove(
-        "playing"
-      );
+function updateMusicUI() {
 
-      musicTitle.textContent =
-        "Our Special Song";
 
-    }
-  );
+  if (musicPlaying) {
+
+
+    musicButton.textContent =
+      "❚❚";
+
+
+    musicButton.classList.add(
+      "playing"
+    );
+
+
+    musicTitle.textContent =
+      "Now playing ♡";
+
+
+  }
+
+  else {
+
+
+    musicButton.textContent =
+      "▶";
+
+
+    musicButton.classList.remove(
+      "playing"
+    );
+
+
+    musicTitle.textContent =
+      "Our Special Song";
+
+  }
 
 }
 
@@ -1072,55 +1122,64 @@ function setupMusic() {
 
 async function toggleMusic() {
 
+
   if (
     birthdayMusic.paused
   ) {
 
+
     try {
+
 
       await birthdayMusic.play();
 
-      musicPlaying = true;
 
-      musicButton.textContent =
-        "❚❚";
+      musicPlaying =
+        true;
 
-      musicButton.classList.add(
-        "playing"
-      );
 
-      musicTitle.textContent =
-        "Now playing ♡";
+      updateMusicUI();
+
 
     }
 
+
     catch (error) {
+
 
       console.error(
         "Music could not start:",
         error
       );
 
+
       musicTitle.textContent =
         "Tap play to start ♡";
 
     }
+
 
   }
 
 
   else {
 
+
     birthdayMusic.pause();
 
-    musicPlaying = false;
+
+    musicPlaying =
+      false;
+
 
     musicButton.textContent =
       "▶";
 
+
     musicButton.classList.remove(
       "playing"
     );
+
 
     musicTitle.textContent =
       "Paused";
@@ -1137,8 +1196,9 @@ async function toggleMusic() {
 
 async function transitionToBirthday() {
 
+
   /*
-    Hilangkan surat.
+    Hilangkan letter.
   */
 
   letterView.classList.remove(
@@ -1146,7 +1206,7 @@ async function transitionToBirthday() {
   );
 
 
-  await wait(500);
+  await wait(600);
 
 
   /*
@@ -1158,7 +1218,7 @@ async function transitionToBirthday() {
   );
 
 
-  await wait(800);
+  await wait(900);
 
 
   createHeartBurst();
@@ -1172,6 +1232,7 @@ async function transitionToBirthday() {
 ========================================= */
 
 function setupLightbox() {
+
 
   const photoLightbox =
     document.getElementById(
@@ -1203,13 +1264,14 @@ function setupLightbox() {
     );
 
 
-
   polaroids.forEach(
     polaroid => {
+
 
       polaroid.addEventListener(
         "click",
         () => {
+
 
           const image =
             polaroid.dataset.image;
@@ -1240,6 +1302,8 @@ function setupLightbox() {
 
 
 
+  /* CLOSE */
+
   function closePhoto() {
 
     photoLightbox.classList.remove(
@@ -1247,7 +1311,6 @@ function setupLightbox() {
     );
 
   }
-
 
 
   closeLightbox.addEventListener(
@@ -1259,6 +1322,7 @@ function setupLightbox() {
   photoLightbox.addEventListener(
     "click",
     event => {
+
 
       if (
         event.target ===
@@ -1276,6 +1340,7 @@ function setupLightbox() {
   document.addEventListener(
     "keydown",
     event => {
+
 
       if (
         event.key === "Escape"
@@ -1298,20 +1363,30 @@ function setupLightbox() {
 
 function resetMusic() {
 
+
   birthdayMusic.pause();
 
-  birthdayMusic.currentTime = 0;
 
-  birthdayMusic.volume = 0.45;
+  birthdayMusic.currentTime =
+    0;
 
-  musicPlaying = false;
+
+  birthdayMusic.volume =
+    .45;
+
+
+  musicPlaying =
+    false;
+
 
   musicButton.textContent =
     "▶";
 
+
   musicButton.classList.remove(
     "playing"
   );
+
 
   musicTitle.textContent =
     "Our Special Song";
@@ -1321,23 +1396,26 @@ function resetMusic() {
 
 
 /* =========================================
-   REPLAY EXPERIENCE
+   REPLAY
 ========================================= */
 
 function replayExperience() {
+
 
   /*
     Batalkan typing.
   */
 
-  typingCancelled = true;
+  typingCancelled =
+    true;
 
 
   /*
     Reset state.
   */
 
-  hasOpened = false;
+  hasOpened =
+    false;
 
 
   /*
@@ -1348,23 +1426,25 @@ function replayExperience() {
 
 
   /*
-    Reset isi surat.
+    Reset letter.
   */
 
   letterGreeting.textContent =
     "";
 
+
   letterBody.innerHTML =
     "";
+
 
   letterEnding.textContent =
     "";
 
 
 
-  /* =====================================
-     RESET ENVELOPE
-  ====================================== */
+  /*
+    Reset envelope.
+  */
 
   const flap =
     document.querySelector(
@@ -1391,9 +1471,9 @@ function replayExperience() {
 
 
 
-  /* =====================================
-     RESET SCENES
-  ====================================== */
+  /*
+    Reset scenes.
+  */
 
   birthdayScene.classList.remove(
     "active"
@@ -1411,9 +1491,9 @@ function replayExperience() {
 
 
 
-  /* =====================================
-     RESET BUTTON
-  ====================================== */
+  /*
+    Reset button.
+  */
 
   openButton.style.opacity =
     "1";
@@ -1424,9 +1504,9 @@ function replayExperience() {
 
 
 
-  /* =====================================
-     RESET SCROLL
-  ====================================== */
+  /*
+    Reset scroll.
+  */
 
   window.scrollTo(
     0,
