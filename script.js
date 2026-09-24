@@ -1,6 +1,6 @@
-/* =========================================
+/* =========================================================
    CONFIG
-========================================= */
+========================================================= */
 
 const CONFIG = {
 
@@ -33,8 +33,1367 @@ const CONFIG = {
 };
 
 
+/* =========================================================
+   ELEMENTS
+========================================================= */
 
-/* =========================================
+const letterScene =
+  document.getElementById("letterScene");
+
+const envelope =
+  document.getElementById("envelope");
+
+const openButton =
+  document.getElementById("openButton");
+
+const letterView =
+  document.getElementById("letterView");
+
+const letterPaper =
+  document.getElementById("letterPaper");
+
+const letterDate =
+  document.getElementById("letterDate");
+
+const letterGreeting =
+  document.getElementById("letterGreeting");
+
+const letterBody =
+  document.getElementById("letterBody");
+
+const letterEnding =
+  document.getElementById("letterEnding");
+
+const birthdayScene =
+  document.getElementById("birthdayScene");
+
+const birthdayMessage =
+  document.getElementById("birthdayMessage");
+
+const heartContainer =
+  document.getElementById("heartContainer");
+
+const replayButton =
+  document.getElementById("replayButton");
+
+const birthdayMusic =
+  document.getElementById("birthdayMusic");
+
+const musicButton =
+  document.getElementById("musicButton");
+
+const musicTitle =
+  document.getElementById("musicTitle");
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let hasOpened = false;
+
+let typingCancelled = false;
+
+let ambientHeartInterval = null;
+
+let musicPlaying = false;
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+function initialize() {
+
+  letterDate.textContent =
+    CONFIG.date;
+
+  birthdayMessage.textContent =
+    CONFIG.birthdayMessage;
+
+  setupInteractions();
+
+  setupMusic();
+
+  setupLightbox();
+
+  startAmbientHearts();
+
+}
+
+
+/* =========================================================
+   INTERACTIONS
+========================================================= */
+
+function setupInteractions() {
+
+  openButton.addEventListener(
+    "click",
+    handleOpenLetter
+  );
+
+
+  envelope.addEventListener(
+    "click",
+    handleOpenLetter
+  );
+
+
+  envelope.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key === "Enter" ||
+        event.key === " "
+      ) {
+
+        event.preventDefault();
+
+        handleOpenLetter();
+
+      }
+
+    }
+  );
+
+
+  replayButton.addEventListener(
+    "click",
+    replayExperience
+  );
+
+}
+
+
+/* =========================================================
+   OPEN HANDLER
+========================================================= */
+
+function handleOpenLetter() {
+
+  if (hasOpened) {
+    return;
+  }
+
+
+  hasOpened = true;
+
+  typingCancelled = false;
+
+
+  /*
+    Musik harus dipanggil
+    langsung dari tap user.
+  */
+
+  startMusicFromUserGesture();
+
+
+  openLetter();
+
+}
+
+
+/* =========================================================
+   MUSIC START
+========================================================= */
+
+function startMusicFromUserGesture() {
+
+  birthdayMusic.currentTime = 0;
+
+  birthdayMusic.volume = 0.45;
+
+
+  const playPromise =
+    birthdayMusic.play();
+
+
+  if (
+    playPromise !== undefined
+  ) {
+
+    playPromise
+      .then(function() {
+
+        musicPlaying = true;
+
+        updateMusicUI();
+
+      })
+      .catch(function(error) {
+
+        console.log(
+          "Autoplay music blocked:",
+          error
+        );
+
+        musicPlaying = false;
+
+        updateMusicUI();
+
+      });
+
+  }
+
+}
+
+
+/* =========================================================
+   OPEN LETTER
+========================================================= */
+
+async function openLetter() {
+
+  /*
+    Button hilang
+  */
+
+  openButton.style.opacity = "0";
+
+  openButton.style.pointerEvents = "none";
+
+
+  /*
+    Animasi amplop
+  */
+
+  envelope.animate(
+
+    [
+      {
+        transform: "scale(1)"
+      },
+
+      {
+        transform: "scale(0.96)"
+      },
+
+      {
+        transform: "scale(1.02)"
+      },
+
+      {
+        transform: "scale(1)"
+      }
+    ],
+
+    {
+      duration: 350,
+
+      easing:
+        "cubic-bezier(.34,1.56,.64,1)"
+    }
+
+  );
+
+
+  await wait(250);
+
+
+  /*
+    Buka flap
+  */
+
+  const flap =
+    document.querySelector(
+      ".envelope-flap"
+    );
+
+
+  if (flap) {
+
+    flap.style.transform =
+      "rotateX(-170deg)";
+
+  }
+
+
+  await wait(650);
+
+
+  /*
+    Keluarkan preview
+  */
+
+  const preview =
+    document.querySelector(
+      ".letter-preview"
+    );
+
+
+  if (preview) {
+
+    preview.animate(
+
+      [
+        {
+          transform:
+            "translateY(0)",
+
+          opacity: 1
+        },
+
+        {
+          transform:
+            "translateY(-120px) scale(1.03)",
+
+          opacity: 1
+        }
+      ],
+
+      {
+        duration: 700,
+
+        easing:
+          "cubic-bezier(.16,1,.3,1)",
+
+        fill: "forwards"
+      }
+
+    );
+
+  }
+
+
+  await wait(500);
+
+
+  /*
+    Pindah ke letter view
+  */
+
+  letterScene.classList.remove("active");
+
+  letterScene.classList.add("hidden");
+
+
+  /*
+    Reset surat
+  */
+
+  letterGreeting.textContent = "";
+
+  letterBody.innerHTML = "";
+
+  letterEnding.textContent = "";
+
+
+  /*
+    Tampilkan surat
+  */
+
+  letterView.classList.add("visible");
+
+
+  /*
+    Paksa scroll ke atas.
+  */
+
+  letterView.scrollTop = 0;
+
+  window.scrollTo(0, 0);
+
+
+  await wait(700);
+
+
+  /*
+    Typing greeting
+  */
+
+  await typeGreeting();
+
+
+  if (typingCancelled) {
+    return;
+  }
+
+
+  await wait(350);
+
+
+  /*
+    Typing body
+  */
+
+  await typeBody();
+
+
+  if (typingCancelled) {
+    return;
+  }
+
+
+  await wait(500);
+
+
+  /*
+    Typing ending
+  */
+
+  await typeEnding();
+
+
+  if (typingCancelled) {
+    return;
+  }
+
+
+  await wait(1000);
+
+
+  createHeartBurst();
+
+
+  await wait(1300);
+
+
+  if (typingCancelled) {
+    return;
+  }
+
+
+  /*
+    Birthday
+  */
+
+  await transitionToBirthday();
+
+}
+
+
+/* =========================================================
+   TYPE GREETING
+========================================================= */
+
+async function typeGreeting() {
+
+  letterGreeting.textContent = "";
+
+
+  await typeRichText(
+    letterGreeting,
+    CONFIG.greeting,
+    75
+  );
+
+}
+
+
+/* =========================================================
+   TYPE BODY
+========================================================= */
+
+async function typeBody() {
+
+  letterBody.innerHTML = "";
+
+
+  for (
+    const paragraph
+    of CONFIG.paragraphs
+  ) {
+
+    if (typingCancelled) {
+      return;
+    }
+
+
+    const p =
+      document.createElement("p");
+
+
+    letterBody.appendChild(p);
+
+
+    await typeRichText(
+      p,
+      paragraph,
+      32
+    );
+
+
+    await wait(450);
+
+  }
+
+}
+
+
+/* =========================================================
+   TYPE ENDING
+========================================================= */
+
+async function typeEnding() {
+
+  letterEnding.textContent = "";
+
+
+  await typeRichText(
+    letterEnding,
+    CONFIG.ending,
+    70
+  );
+
+}
+
+
+/* =========================================================
+   RICH TEXT TYPING
+========================================================= */
+
+async function typeRichText(
+  element,
+  html,
+  delay = 35
+) {
+
+  const temp =
+    document.createElement("div");
+
+
+  temp.innerHTML = html;
+
+
+  async function processNode(
+    node,
+    parent
+  ) {
+
+    if (typingCancelled) {
+      return;
+    }
+
+
+    /*
+      TEXT
+    */
+
+    if (
+      node.nodeType ===
+      Node.TEXT_NODE
+    ) {
+
+      for (
+        const character
+        of node.textContent
+      ) {
+
+        if (typingCancelled) {
+          return;
+        }
+
+
+        parent.appendChild(
+          document.createTextNode(
+            character
+          )
+        );
+
+
+        await wait(
+          getTypingDelay(
+            character,
+            delay
+          )
+        );
+
+      }
+
+
+      return;
+    }
+
+
+    /*
+      ELEMENT
+    */
+
+    if (
+      node.nodeType ===
+      Node.ELEMENT_NODE
+    ) {
+
+      const clone =
+        node.cloneNode(false);
+
+
+      parent.appendChild(clone);
+
+
+      for (
+        const child
+        of node.childNodes
+      ) {
+
+        await processNode(
+          child,
+          clone
+        );
+
+      }
+
+    }
+
+  }
+
+
+  for (
+    const child
+    of temp.childNodes
+  ) {
+
+    await processNode(
+      child,
+      element
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   TYPING DELAY
+========================================================= */
+
+function getTypingDelay(
+  character,
+  base
+) {
+
+  /*
+    Titik
+  */
+
+  if (
+    character === "." ||
+    character === "!" ||
+    character === "?"
+  ) {
+
+    return base * 8;
+
+  }
+
+
+  /*
+    Koma
+  */
+
+  if (
+    character === ","
+  ) {
+
+    return base * 4;
+
+  }
+
+
+  /*
+    Spasi
+  */
+
+  if (
+    character === " "
+  ) {
+
+    return base * 0.5;
+
+  }
+
+
+  /*
+    New line
+  */
+
+  if (
+    character === "\n"
+  ) {
+
+    return base * 3;
+
+  }
+
+
+  return base;
+
+}
+
+
+/* =========================================================
+   WAIT
+========================================================= */
+
+function wait(ms) {
+
+  return new Promise(
+    function(resolve) {
+
+      setTimeout(
+        resolve,
+        ms
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   AMBIENT HEARTS
+========================================================= */
+
+function startAmbientHearts() {
+
+  if (ambientHeartInterval) {
+
+    clearInterval(
+      ambientHeartInterval
+    );
+
+  }
+
+
+  ambientHeartInterval =
+    setInterval(
+      createFloatingHeart,
+      2800
+    );
+
+}
+
+
+/* =========================================================
+   FLOATING HEART
+========================================================= */
+
+function createFloatingHeart() {
+
+  const heart =
+    document.createElement("div");
+
+
+  heart.className =
+    "floating-heart";
+
+
+  heart.textContent =
+    Math.random() > 0.5
+      ? "♡"
+      : "♥";
+
+
+  const left =
+    Math.random() * 100;
+
+
+  const size =
+    10 +
+    Math.random() * 13;
+
+
+  const duration =
+    7 +
+    Math.random() * 7;
+
+
+  const drift =
+    (Math.random() - 0.5) *
+    160;
+
+
+  heart.style.left =
+    `${left}%`;
+
+
+  heart.style.fontSize =
+    `${size}px`;
+
+
+  heart.style.animationDuration =
+    `${duration}s`;
+
+
+  heart.style.setProperty(
+    "--drift",
+    `${drift}px`
+  );
+
+
+  heartContainer.appendChild(
+    heart
+  );
+
+
+  setTimeout(
+    function() {
+
+      heart.remove();
+
+    },
+
+    duration * 1000
+  );
+
+}
+
+
+/* =========================================================
+   HEART BURST
+========================================================= */
+
+function createHeartBurst() {
+
+  const centerX =
+    window.innerWidth / 2;
+
+
+  const centerY =
+    window.innerHeight / 2;
+
+
+  for (
+    let i = 0;
+    i < 28;
+    i++
+  ) {
+
+    const heart =
+      document.createElement("div");
+
+
+    heart.className =
+      "burst-heart";
+
+
+    heart.textContent =
+      Math.random() > 0.4
+        ? "♥"
+        : "♡";
+
+
+    heart.style.left =
+      `${centerX}px`;
+
+
+    heart.style.top =
+      `${centerY}px`;
+
+
+    const angle =
+      Math.random() *
+      Math.PI *
+      2;
+
+
+    const distance =
+      100 +
+      Math.random() * 250;
+
+
+    const x =
+      Math.cos(angle) *
+      distance;
+
+
+    const y =
+      Math.sin(angle) *
+      distance;
+
+
+    heart.style.setProperty(
+      "--x",
+      `${x}px`
+    );
+
+
+    heart.style.setProperty(
+      "--y",
+      `${y}px`
+    );
+
+
+    heartContainer.appendChild(
+      heart
+    );
+
+
+    setTimeout(
+      function() {
+
+        heart.remove();
+
+      },
+
+      1600
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   MUSIC SETUP
+========================================================= */
+
+function setupMusic() {
+
+  birthdayMusic.volume = 0.45;
+
+
+  musicButton.addEventListener(
+    "click",
+    toggleMusic
+  );
+
+
+  birthdayMusic.addEventListener(
+    "play",
+    function() {
+
+      musicPlaying = true;
+
+      updateMusicUI();
+
+    }
+  );
+
+
+  birthdayMusic.addEventListener(
+    "pause",
+    function() {
+
+      if (
+        birthdayMusic.currentTime > 0
+      ) {
+
+        musicPlaying = false;
+
+        updateMusicUI();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   MUSIC UI
+========================================================= */
+
+function updateMusicUI() {
+
+  if (musicPlaying) {
+
+    musicButton.textContent =
+      "❚❚";
+
+    musicButton.classList.add(
+      "playing"
+    );
+
+    musicTitle.textContent =
+      "Now playing ♡";
+
+  }
+
+  else {
+
+    musicButton.textContent =
+      "▶";
+
+    musicButton.classList.remove(
+      "playing"
+    );
+
+    musicTitle.textContent =
+      "Tap ▶ untuk memutar musik ♡";
+
+  }
+
+}
+
+
+/* =========================================================
+   TOGGLE MUSIC
+========================================================= */
+
+async function toggleMusic() {
+
+  if (
+    birthdayMusic.paused
+  ) {
+
+    try {
+
+      await birthdayMusic.play();
+
+      musicPlaying = true;
+
+      updateMusicUI();
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Music gagal:",
+        error
+      );
+
+      musicTitle.textContent =
+        "Tap ▶ untuk memutar musik ♡";
+
+    }
+
+  }
+
+  else {
+
+    birthdayMusic.pause();
+
+    musicPlaying = false;
+
+    updateMusicUI();
+
+  }
+
+}
+
+
+/* =========================================================
+   BIRTHDAY TRANSITION
+========================================================= */
+
+async function transitionToBirthday() {
+
+  /*
+    Hilangkan surat
+  */
+
+  letterView.classList.remove(
+    "visible"
+  );
+
+
+  await wait(500);
+
+
+  /*
+    Tampilkan birthday
+  */
+
+  birthdayScene.classList.add(
+    "visible"
+  );
+
+
+  /*
+    Pastikan scroll kembali ke atas
+    saat birthday muncul.
+  */
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+
+  await wait(700);
+
+
+  createHeartBurst();
+
+}
+
+
+/* =========================================================
+   LIGHTBOX
+========================================================= */
+
+function setupLightbox() {
+
+  const photoLightbox =
+    document.getElementById(
+      "photoLightbox"
+    );
+
+
+  const lightboxImage =
+    document.getElementById(
+      "lightboxImage"
+    );
+
+
+  const lightboxCaption =
+    document.getElementById(
+      "lightboxCaption"
+    );
+
+
+  const closeLightbox =
+    document.getElementById(
+      "closeLightbox"
+    );
+
+
+  const polaroids =
+    document.querySelectorAll(
+      ".polaroid"
+    );
+
+
+  polaroids.forEach(
+    function(polaroid) {
+
+      polaroid.addEventListener(
+        "click",
+        function() {
+
+          const image =
+            polaroid.dataset.image;
+
+
+          const caption =
+            polaroid.dataset.caption ||
+            "";
+
+
+          lightboxImage.src =
+            image;
+
+
+          lightboxCaption.textContent =
+            caption;
+
+
+          photoLightbox.classList.add(
+            "visible"
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  function closePhoto() {
+
+    photoLightbox.classList.remove(
+      "visible"
+    );
+
+    lightboxImage.src = "";
+
+  }
+
+
+  closeLightbox.addEventListener(
+    "click",
+    closePhoto
+  );
+
+
+  photoLightbox.addEventListener(
+    "click",
+    function(event) {
+
+      if (
+        event.target ===
+        photoLightbox
+      ) {
+
+        closePhoto();
+
+      }
+
+    }
+  );
+
+
+  document.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key === "Escape"
+      ) {
+
+        closePhoto();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   RESET MUSIC
+========================================================= */
+
+function resetMusic() {
+
+  birthdayMusic.pause();
+
+  birthdayMusic.currentTime = 0;
+
+  birthdayMusic.volume = 0.45;
+
+  musicPlaying = false;
+
+  musicButton.textContent = "▶";
+
+  musicButton.classList.remove(
+    "playing"
+  );
+
+  musicTitle.textContent =
+    "Our Special Song";
+
+}
+
+
+/* =========================================================
+   REPLAY
+========================================================= */
+
+function replayExperience() {
+
+  typingCancelled = true;
+
+  hasOpened = false;
+
+
+  resetMusic();
+
+
+  /*
+    Reset letter
+  */
+
+  letterGreeting.textContent = "";
+
+  letterBody.innerHTML = "";
+
+  letterEnding.textContent = "";
+
+
+  /*
+    Reset envelope
+  */
+
+  const flap =
+    document.querySelector(
+      ".envelope-flap"
+    );
+
+
+  const preview =
+    document.querySelector(
+      ".letter-preview"
+    );
+
+
+  if (flap) {
+
+    flap.style.transform =
+      "rotateX(0deg)";
+
+  }
+
+
+  if (preview) {
+
+    preview.style.transform =
+      "translateY(0)";
+
+    preview.style.opacity =
+      "1";
+
+  }
+
+
+  /*
+    Reset scene
+  */
+
+  birthdayScene.classList.remove(
+    "visible"
+  );
+
+
+  letterView.classList.remove(
+    "visible"
+  );
+
+
+  letterScene.classList.remove(
+    "hidden"
+  );
+
+
+  letterScene.classList.add(
+    "active"
+  );
+
+
+  /*
+    Reset button
+  */
+
+  openButton.style.opacity =
+    "1";
+
+  openButton.style.pointerEvents =
+    "auto";
+
+
+  /*
+    Reset scroll
+  */
+
+  letterView.scrollTop = 0;
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+
+  /*
+    Beri kesempatan browser
+    menyelesaikan reset.
+  */
+
+  setTimeout(
+    function() {
+
+      typingCancelled = false;
+
+    },
+
+    100
+  );
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+initialize();/* =========================================
    ELEMENTS
 ========================================= */
 
