@@ -18,7 +18,7 @@ const CONFIG = {
 
     `Aku gabisa ngomong banyak karena yah ga jago ngomong, aku cuma mau bilang kalo aku itu makasi banget udah ditemenin sama kamu meski kamum nih sering <span class="glowing-word">ngeselin</span> ke aku.`,
 
-    `Semoga kamu selalu diberikan berkah umur, dilancarkan rezekinya, dan segala keinginan kamu <span class="glowing-word">tercapai</span> ya sayangku.`
+    `Semoga kamu selalu diberikan berkah umur, dilancarkan rezekinya, dan segala keinginan kamu <span class="glowing-word">tercapai</span> ya sayangku.`,
 
     `Sekarang kamu udah ga kecil lagi sayang sekarang udah gede, jadi jangan banyak nangis lagi yaa sekarang harus kuat dan buat bangga keluarga kamu terutama buat <span class="glowing-word">almarhum ibu kamu.</span>`
 
